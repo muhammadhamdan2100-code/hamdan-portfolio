@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import {
   motion,
   useMotionValue,
@@ -125,6 +126,8 @@ export default function Hero() {
   const headingOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.1]);
   const canvasY = useTransform(scrollYProgress, [0, 1], [0, 90]);
   const chipsY = useTransform(scrollYProgress, [0, 1], [0, -70]);
+  const portraitY = useTransform(scrollYProgress, [0, 1], [0, 60]);
+  const portraitX = useTransform(smx, (v) => v * 8);
   const cueOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
 
   const entrance = { opacity: 1, y: 0 };
@@ -156,7 +159,7 @@ export default function Hero() {
       {/* Floating system chips */}
       <motion.div
         style={{ y: reduce ? 0 : chipsY }}
-        className="pointer-events-none absolute inset-0 z-[5]"
+        className="pointer-events-none absolute inset-0 z-20"
         aria-hidden
       >
         {CHIPS.map((chip) => (
@@ -165,6 +168,33 @@ export default function Hero() {
       </motion.div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center px-5 pb-24 pt-32 sm:px-8 sm:pt-36">
+        {/* Portrait: background-removed photo anchored right, behind typography */}
+        <motion.div
+          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 36 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.1, delay: 0.35, ease: "easeOut" }}
+          className="pointer-events-none absolute right-1 top-36 z-0 h-52 sm:right-4 md:h-64 lg:bottom-0 lg:right-0 lg:top-auto lg:h-[64%] xl:right-6 xl:h-[70%]"
+        >
+          <motion.div
+            style={{ y: reduce ? 0 : portraitY, x: reduce ? 0 : portraitX }}
+            className="relative h-full"
+          >
+            <div
+              aria-hidden
+              className="absolute left-1/2 top-[36%] h-[62%] w-[150%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent/10 blur-[70px]"
+            />
+            <Image
+              src="/images/hamdan-portrait.webp"
+              alt="Portrait of Muhammad Hamdan"
+              width={717}
+              height={1400}
+              preload
+              sizes="(max-width: 767px) 45vw, (max-width: 1023px) 30vw, 25vw"
+              className="relative h-full w-auto drop-shadow-[0_0_45px_rgba(0,229,160,0.16)]"
+            />
+          </motion.div>
+        </motion.div>
+
         <motion.p
           initial={hidden}
           animate={entrance}
@@ -180,6 +210,7 @@ export default function Hero() {
           animate={entrance}
           transition={{ duration: 0.9, delay: 0.25 }}
           style={{ y: reduce ? 0 : headingY, opacity: reduce ? 1 : headingOpacity }}
+          className="relative"
         >
           <Display3D
             className="mt-7"
