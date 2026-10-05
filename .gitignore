@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# editor / OS
+.idea/
+.vscode/
+*.swp
+Thumbs.db
+
+# local QA artifacts (regenerable: node scripts/qa.mjs)
+/qa/
